@@ -2,6 +2,11 @@ package main;
 
 import office.*;
 
+import java.util.List;
+
+import gui.*;
+
+
 
 public class Main {
 
@@ -14,6 +19,10 @@ public class Main {
 		
 		//Print it for debug
 		System.out.println(o.toString());
+		
+		//istanziate the gui
+		Gui window = new Gui(o.getServiceTypeList(), o.getCounterList());
+		window.show();
 		
 		
 		/*
