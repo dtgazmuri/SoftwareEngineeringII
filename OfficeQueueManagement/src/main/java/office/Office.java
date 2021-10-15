@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import DB.DBManager;
+import db.DBManager;
 
 public class Office {
 	
