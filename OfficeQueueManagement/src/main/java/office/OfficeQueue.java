@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OfficeQueue {
-	
+
 	private ServiceType queueServiceType;		//The service type associated with the queue
 	private List<Ticket> ticketQueue;			//The list of all the tickets associated with the queue
 	
@@ -28,7 +28,11 @@ public class OfficeQueue {
 	public ServiceType getServiceType() {
 		return this.queueServiceType;
 	}
-	
+	public List<Ticket> getTicketQueue() {
+		return ticketQueue;
+	}
+
+
 	//### SETTER ###//
 	
 	public void setServiceType(ServiceType s) {

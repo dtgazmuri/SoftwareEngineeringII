@@ -1,11 +1,9 @@
 package office;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import db.DBManager;
+import sun.lwawt.macosx.CSystemTray;
 
 public class Office {
 	
@@ -243,15 +241,51 @@ public class Office {
 			//Add it to the map
 			this.addQueue(oq);
 		}
-		
+
 		//6) Return
 		return;
 		
 	}
-	
-	
-	
-	
+
+
+
+	/** returns the ticket number and the type of service of the next client for the specified counter.
+	 * The next ticket to serve is selected with the following rule:
+	 * select the first number from the longest queue among those corresponding to the service types the counter can offer.
+	 * If two or more queues have the same length, the queue associated with request type having the lowest service time is selected.
+	 *
+	 * @param counterId The counter which is free at the moment
+	 * @return The ticket to be served at this counter
+	 */
+	public Ticket notifyThatCounterIsFree(int counterId) {
+		List<ServiceType> counterServiceTypes = getCounterById(counterId).getServiceTypeList();
+		ArrayList<OfficeQueue> selectedQueues = new ArrayList<>();
+		int maxQueueLength = 1;
+		for(ServiceType st: counterServiceTypes){
+			if (getQueueByServiceType(st).getQueueLength() < maxQueueLength) continue;
+			if (getQueueByServiceType(st).getQueueLength() > maxQueueLength){
+				selectedQueues.clear();
+			}
+			// update max-length of queues
+			selectedQueues.add(getQueueByServiceType(st));
+			maxQueueLength = getQueueByServiceType(st).getQueueLength();
+		}
+		if(selectedQueues.size() == 1 ){
+			return selectedQueues.get(0).getTicketQueue().get(0);
+		}
+		else if (selectedQueues.size() > 1 ){
+			double minTime = Double.MAX_VALUE;
+			Ticket selectedTicket = null;
+			for (OfficeQueue q: selectedQueues){
+				if( q.getServiceType().getTime() < minTime){
+					minTime = q.getServiceType().getTime();
+					selectedTicket = q.getTicketQueue().get(0);
+				}
+			}
+			return selectedTicket;
+		}
+		else return null;
+	}
 	
 	
 	
@@ -261,9 +295,7 @@ public class Office {
 		return null;
 	}
 	
-	public void notifyThatCounterIsFree(int counterId) {
-		return;
-	}
+
 	
 	
 	
