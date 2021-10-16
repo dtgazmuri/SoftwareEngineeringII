@@ -3,7 +3,6 @@ package office;
 import java.util.*;
 
 import db.DBManager;
-import sun.lwawt.macosx.CSystemTray;
 
 public class Office {
 	
@@ -62,8 +61,12 @@ public class Office {
 	
 	
 	//### GETTERS ###//
-	
-	
+
+	public Map<ServiceType, OfficeQueue> getQueueMap() {
+		return queueMap;
+	}
+
+
 	//COUNTERS
 	
 	public List<OfficeCounter> getCounterList(){
