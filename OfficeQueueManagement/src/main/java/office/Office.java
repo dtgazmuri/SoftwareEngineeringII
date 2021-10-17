@@ -6,7 +6,7 @@ import db.DBManager;
 
 public class Office {
 	
-	public static final int CURRENT_TICKET_NUMBER = 1;				//The static ticket number, it starts from 0 at the start of the program and then it will be increased every time a anew ticket is taken
+	public static int CURRENT_TICKET_NUMBER = 1;				//The static ticket number, it starts from 0 at the start of the program and then it will be increased every time a anew ticket is taken
 
 	
 	private List<OfficeCounter> counterList;				//The list of counters present in the office
@@ -294,7 +294,7 @@ public class Office {
 	
 	//### TO DO ###//
 	
-	public Ticket getNewTicket() {
+	public Ticket getNewTicket(ServiceType s) {
 		System.out.println("Get Ticket: The service type is " + s.getName());
 		int ticketNumber = CURRENT_TICKET_NUMBER;
 		System.out.println("Get Ticket: Ticket number: " + CURRENT_TICKET_NUMBER);
