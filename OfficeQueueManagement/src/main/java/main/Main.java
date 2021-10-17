@@ -21,7 +21,7 @@ public class Main {
 		System.out.println(o.toString());
 		
 		//istanziate the gui
-		Gui window = new Gui(o.getServiceTypeList(), o.getCounterList());
+		Gui window = new Gui(o.getServiceTypeList(), o.getCounterList(), o);
 		window.show();
 		
 		

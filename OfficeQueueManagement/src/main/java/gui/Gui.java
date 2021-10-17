@@ -10,6 +10,7 @@ import java.awt.event.*;
 import office.OfficeCounter;
 import office.ServiceType;
 import office.Ticket;
+import office.Office;
 
 
 public class Gui {
@@ -20,11 +21,13 @@ public class Gui {
 	private String selectedServiceName;
 	private final int FRAME_WIDTH = 1280;
 	private final int FRAME_HEIGHT = 720;
+	private Office o;
 	
 	
-	public Gui (List<ServiceType> services, List<OfficeCounter> counterList) {
+	public Gui (List<ServiceType> services, List<OfficeCounter> counterList, Office office) {
 		this.serviceList = services;
 		this.frame = new JFrame("OfficeQueueManager");
+		this.o = office;
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
@@ -54,12 +57,41 @@ public class Gui {
         JButton pickTicket = new JButton("Get a ticket for the selected type of service");
         
         //action listener for getting a ticket
-        ActionListener actionListener = new ActionListener() {
+        ActionListener ticketActionListener = new ActionListener() {
         	 public void actionPerformed(ActionEvent actionEvent) {
         		 System.out.println(serviceTypeSelection.getSelectedItem());
+        		 
+        		 //Ticket ticket = o.getNewTicket();
+        		 JPanel ticketPanel = new JPanel(new GridLayout(3, 1, 0, 10));
+        		 JLabel ticketPanelLable = new JLabel("Your ticket:", SwingConstants.CENTER);
+        		 JLabel ticketIdLabel = new JLabel("ID: "/*+ticket.getId()*/);
+        		 JLabel ticketServiceLabel = new JLabel("Type of service: "/*+ticket.getServiceType()*/);
+        		 ticketPanel.add(ticketPanelLable);
+        		 ticketPanel.add(ticketIdLabel);
+        		 ticketPanel.add(ticketServiceLabel);
+        		 ticketPanel.setPreferredSize(new Dimension(300, 100));
+        		 ticketPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        		 customerPanel.add(ticketPanel);
+        		 customerPanel.updateUI();
+        		 
+        		 Timer wipeOutTimer = new Timer(5000, new ActionListener() {
+                     public void actionPerformed(ActionEvent event) 
+                     {
+                         customerPanel.remove(ticketPanel);
+                         ticketPanel.validate();
+                         ticketPanel.repaint();
+                     }
+                 });
+        		 wipeOutTimer.setRepeats(false);
+        		 if (!wipeOutTimer.isRunning()) {
+        		     wipeOutTimer.start();
+        		 }
+        		 else 
+        			 wipeOutTimer.restart();
+                 
         	 }
     	 };
-        pickTicket.addActionListener(actionListener);
+        pickTicket.addActionListener(ticketActionListener);
         customerPanel.add(pickTicket);
          
         
@@ -77,6 +109,15 @@ public class Gui {
         	else 
         		ticket = new JLabel("Ticket being served: free");
         	JButton done = new JButton("Done");
+        	
+        	ActionListener counterActionListener = new ActionListener() {
+            	public void actionPerformed(ActionEvent actionEvent) {
+            		o.notifyThatCounterIsFree(tmp.getId());
+            		rightPanel.updateUI();
+            	}
+            };
+            done.addActionListener(counterActionListener);
+        	
         	ticketAndDone.add(ticket);
         	ticketAndDone.add(done);
         	singleCounter.add(ticketAndDone);
