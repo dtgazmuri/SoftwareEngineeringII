@@ -60,6 +60,15 @@ public class Gui {
         ActionListener ticketActionListener = new ActionListener() {
         	 public void actionPerformed(ActionEvent actionEvent) {
         		 System.out.println(serviceTypeSelection.getSelectedItem());
+                 int num = 0;
+                 for (int i = 0; i < o.getServiceTypesNumber() ; i++) {
+                     if (o.getServiceTypeList().get(i).getName() == serviceTypeSelection.getSelectedItem()) {
+                         num = i;
+                         break;
+                     }
+                 }
+                 
+                 o.getNewTicket(o.getServiceTypeList().get(num));
         		 
         		 //Ticket ticket = o.getNewTicket();
         		 JPanel ticketPanel = new JPanel(new GridLayout(3, 1, 0, 10));

@@ -295,7 +295,17 @@ public class Office {
 	//### TO DO ###//
 	
 	public Ticket getNewTicket() {
-		return null;
+		System.out.println("Get Ticket: The service type is " + s.getName());
+		int ticketNumber = CURRENT_TICKET_NUMBER;
+		System.out.println("Get Ticket: Ticket number: " + CURRENT_TICKET_NUMBER);
+		Ticket newTicket = new Ticket(ticketNumber, s);
+		
+		OfficeQueue queueToPushTo =  getQueueByServiceType(s); // Get queue of service type
+		queueToPushTo.pushTicket(newTicket); // Push ticket to queue
+		
+		CURRENT_TICKET_NUMBER += 1;
+		
+		return newTicket;
 	}
 	
 
