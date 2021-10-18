@@ -300,8 +300,33 @@ public class Office {
 		System.out.println("Get Ticket: Ticket number: " + CURRENT_TICKET_NUMBER);
 		Ticket newTicket = new Ticket(ticketNumber, s);
 		
-		OfficeQueue queueToPushTo =  getQueueByServiceType(s); // Get queue of service type
-		queueToPushTo.pushTicket(newTicket); // Push ticket to queue
+		OfficeCounter selectedCounter = null;
+		
+		// This for loop checks if there is a free counter that can immediately serve the client with
+		// this ticket
+		
+		for (int i = 0; i < getCounterNumber() ; i++ ) {
+			if (getCounterList().get(i).isServicePresent(s.getId())) {
+				if (getCounterList().get(i).getCurrentlyServedTicket() == null) {
+					selectedCounter = getCounterList().get(i);
+					break;
+				}
+				
+			}
+		}
+		
+		// If a free counter was found, the client is immediately served and the ticket doesn't enter
+		// the queue. If no free counter is found, the ticket joins the corresponding queue.
+		
+		if (selectedCounter != null) {
+			System.out.println("This ticket will be served right away in Counter " + selectedCounter.getId());
+			selectedCounter.setCurrentlyServedTicket(newTicket);
+		}
+		else {
+			System.out.println("All the counters that offer this service are currently busy, so the Ticket will join the queue");
+			OfficeQueue queueToPushTo =  getQueueByServiceType(s); // Get queue of service type
+			queueToPushTo.pushTicket(newTicket); // Push ticket to queue
+		}
 		
 		CURRENT_TICKET_NUMBER += 1;
 		
