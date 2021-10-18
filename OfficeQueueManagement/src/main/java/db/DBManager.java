@@ -13,7 +13,11 @@ import office.ServiceType;
 
 public class DBManager {
 
-
+	/**Create a connection with the database.
+	 * 
+	 * @return The connection
+	 * @throws SQLException
+	 */
     public static Connection getConnection() throws SQLException {
 		Connection conn=null;
 		try {
@@ -28,7 +32,6 @@ public class DBManager {
     }
 
 
-	//Useless?
 	/** The function returns the list of Type of Services with all its informations.
 	 * @return ArrayList<ServiceType> 
 	*/
@@ -81,8 +84,9 @@ public class DBManager {
 
 	/** The function add to the database the last ticked processed 
 	 * @throws SQLException
-	 * @params (Ticket t, int counter) 			....
-	 * */
+	 * @param t the new ticket
+	 * @param counter the counter who processed the ticket	 
+	 * **/
 	
 	 public void addTicket(Ticket t, int counter) throws SQLException{
 		ServiceType st = t.getServiceType();
@@ -91,12 +95,12 @@ public class DBManager {
 		PreparedStatement prepState = null;
 		String sql = "INSERT INTO tickets VALUES(NULL,?,?,?)";
 		try{	
-			prepState =
-				connection.prepareStatement(sql);
+			prepState =	connection.prepareStatement(sql);
 			prepState.setInt(1, st.getId());
 			prepState.setInt(2, counter);
 			prepState.setString(3, date);
 			prepState.executeUpdate();
+			System.out.println("Ticket"+t.getId()+"added to the database correctly!");
 		}
 		catch(SQLException e){
 			throw new Error("Problem on querying the database", e);

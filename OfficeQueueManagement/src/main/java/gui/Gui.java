@@ -68,13 +68,12 @@ public class Gui {
                      }
                  }
                  
-                 o.getNewTicket(o.getServiceTypeList().get(num));
-        		 
-        		 //Ticket ticket = o.getNewTicket();
+        		 Ticket ticket = o.getNewTicket(o.getServiceTypeList().get(num));
         		 JPanel ticketPanel = new JPanel(new GridLayout(3, 1, 0, 10));
         		 JLabel ticketPanelLable = new JLabel("Your ticket:", SwingConstants.CENTER);
-        		 JLabel ticketIdLabel = new JLabel("ID: "/*+ticket.getId()*/);
-        		 JLabel ticketServiceLabel = new JLabel("Type of service: "/*+ticket.getServiceType()*/);
+        		 JLabel ticketIdLabel = new JLabel("ID: "+ticket.getId());
+        		 JLabel ticketServiceLabel = new JLabel("Type of service: "+ticket.getServiceType().getName());
+				 //ADD ESTIMATED WAITING TIME
         		 ticketPanel.add(ticketPanelLable);
         		 ticketPanel.add(ticketIdLabel);
         		 ticketPanel.add(ticketServiceLabel);
@@ -102,7 +101,6 @@ public class Gui {
     	 };
         pickTicket.addActionListener(ticketActionListener);
         customerPanel.add(pickTicket);
-         
         
         
         //OFFICER VIEW
@@ -119,9 +117,11 @@ public class Gui {
         		ticket = new JLabel("Ticket being served: free");
         	JButton done = new JButton("Done");
         	
+			//DONE BUTTON 
         	ActionListener counterActionListener = new ActionListener() {
             	public void actionPerformed(ActionEvent actionEvent) {
-            		o.notifyThatCounterIsFree(tmp.getId());
+					o.notifyThatCounterIsFree(tmp.getId());
+					o.addServedTicketToDB(tmp.getCurrentlyServedTicket(), tmp.getId());
             		rightPanel.updateUI();
             	}
             };

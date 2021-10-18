@@ -1,5 +1,6 @@
 package office;
 
+import java.sql.SQLException;
 import java.util.*;
 
 import db.DBManager;
@@ -201,19 +202,7 @@ public class Office {
 		//Create all
 		
 		//0) Create the Service Types
-		ServiceType st1 = new ServiceType(1, "Accounting", 5.4);
-		ServiceType st2 = new ServiceType(2, "Delivery and Mailing", 10.1);
-		ServiceType st3 = new ServiceType(3, "Money Withdrawal", 1.8);
-		ServiceType st4 = new ServiceType(4, "Bill Payment", 8.3);
-		ServiceType st5 = new ServiceType(5, "Service Complaints", 120.0);
-		
-		//1) Add them to the list
-		this.addServiceType(st1);
-		this.addServiceType(st2);
-		this.addServiceType(st3);
-		this.addServiceType(st4);
-		this.addServiceType(st5);
-		
+		this.serviceTypesList = dbManager.getServiceType();
 		//2) Create the counters
 		OfficeCounter c1 = new OfficeCounter(1);
 		OfficeCounter c2 = new OfficeCounter(2);
@@ -225,15 +214,14 @@ public class Office {
 		this.addCounter(c3);
 		
 		//4) Set up the service types for the counters
-		c1.addServiceType(st1);
-		c1.addServiceType(st2);
+		c1.addServiceType(serviceTypesList.get(1));
+		c1.addServiceType(serviceTypesList.get(2));
 		
-		c2.addServiceType(st1);
-		c2.addServiceType(st3);
+		c2.addServiceType(serviceTypesList.get(1));
+		c2.addServiceType(serviceTypesList.get(3));
 		
-		c3.addServiceType(st4);
-		c3.addServiceType(st5);
-		c3.addServiceType(st2);
+		c3.addServiceType(serviceTypesList.get(4));
+		c3.addServiceType(serviceTypesList.get(2));
 		
 		//5) Create the queues
 		for (ServiceType st : this.getServiceTypeList()) {
@@ -264,6 +252,7 @@ public class Office {
 		List<ServiceType> counterServiceTypes = getCounterById(counterId).getServiceTypeList();
 		ArrayList<OfficeQueue> selectedQueues = new ArrayList<>();
 		int maxQueueLength = 1;
+
 		for(ServiceType st: counterServiceTypes){
 			if (getQueueByServiceType(st).getQueueLength() < maxQueueLength) continue;
 			if (getQueueByServiceType(st).getQueueLength() > maxQueueLength){
@@ -308,8 +297,20 @@ public class Office {
 		return newTicket;
 	}
 	
-
-	
+	/** Add the latest served ticket to the database of tickets
+	 * @param t the ticket;
+	 * @param counter the counter who performs the action
+	 *
+	 * 
+	 */
+	public void addServedTicketToDB(Ticket t, int counter){
+		try{
+			dbManager.addTicket(t, counter);
+		}
+		catch(SQLException e){
+			System.out.println(e);
+		}
+	}
 	
 	
 	
