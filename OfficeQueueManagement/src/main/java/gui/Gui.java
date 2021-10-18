@@ -14,28 +14,37 @@ import office.Office;
 
 
 public class Gui {
-	private List<ServiceType> serviceList;
+	//private List<ServiceType> serviceList;
 	private List<OfficeCounter> counterList;
-	private JFrame frame;
 	private String[] serviceNames;
-	private String selectedServiceName;
+	//private String selectedServiceName;
 	private final int FRAME_WIDTH = 1280;
 	private final int FRAME_HEIGHT = 720;
 	private Office o;
 	
+	//GUI components
+	private JFrame frame;
+	private JTabbedPane tabbedPane;
+	private JPanel rightPanel;
+	private JPanel customerPanel;
+	private JPanel officerPanel;
+	private JPanel managerPanel;
 	
+
 	public Gui (List<ServiceType> services, List<OfficeCounter> counterList, Office office) {
-		this.serviceList = services;
+		//this.serviceList = services;
 		this.frame = new JFrame("OfficeQueueManager");
 		this.o = office;
+		this.counterList = counterList;
+		
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
         //creating a tabbed pane for customer, officers and manager
-        JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         
         //right panel, with the screen having information for clients
-        JPanel rightPanel = new JPanel();
+        rightPanel = new JPanel();
         rightPanel.setPreferredSize(new Dimension(FRAME_WIDTH*2/5, FRAME_HEIGHT));;
 
         //getting the serviceNames from the List<ServiceTypes>
@@ -47,7 +56,31 @@ public class Gui {
         }
         
         //CUSTOMER VIEW
-        JPanel customerPanel = new JPanel();
+        updateCustomerView();
+        
+        //OFFICER VIEW
+        updateOfficerView();
+       
+        //MANAGER VIEW 
+        updateManagerView();
+        
+        //Right screen with the information on tickets currently served
+        updateLobbyScreen();
+        
+        //adding panels to tabbedPane
+        tabbedPane.addTab("Customer", null, customerPanel, "See the customer view");
+        tabbedPane.addTab("Officer", null, officerPanel, "See the officer view");
+        tabbedPane.addTab("Manager", null, managerPanel, "See the manager view");
+        
+
+        //Adding Components to the frame.
+        frame.getContentPane().add(BorderLayout.CENTER, tabbedPane);
+        frame.getContentPane().add(BorderLayout.EAST, rightPanel);
+     	}
+	
+	//dividing the creation function into smaller functions
+	private void updateCustomerView() {
+		customerPanel = new JPanel();
         JLabel serviceLabel = new JLabel("Select the desired type of service: ");
         customerPanel.add(serviceLabel);
         JComboBox serviceTypeSelection = new JComboBox(serviceNames);
@@ -74,7 +107,8 @@ public class Gui {
         		 JLabel ticketPanelLable = new JLabel("Your ticket:", SwingConstants.CENTER);
         		 JLabel ticketIdLabel = new JLabel("ID: "+ticket.getId());
         		 JLabel ticketServiceLabel = new JLabel("Type of service: "+ticket.getServiceType().getName());
-				 //ADD ESTIMATED WAITING TIME
+				 
+        		 //TODO: ADD ESTIMATED WAITING TIME
 
 
         		 ticketPanel.add(ticketPanelLable);
@@ -89,6 +123,7 @@ public class Gui {
                      public void actionPerformed(ActionEvent event) 
                      {
                          customerPanel.remove(ticketPanel);
+                         //TODO: NOT WORKING (doesn't remove the ticket after 5 seconds)
                          ticketPanel.validate();
                          ticketPanel.repaint();
                      }
@@ -104,10 +139,10 @@ public class Gui {
     	 };
         pickTicket.addActionListener(ticketActionListener);
         customerPanel.add(pickTicket);
-        
-        
-        //OFFICER VIEW
-        JPanel officerPanel = new JPanel(new GridLayout(counterList.size(), 1, 0, 10));
+	}
+
+	private void updateOfficerView() {
+		officerPanel = new JPanel(new GridLayout(counterList.size(), 1, 0, 10));
         for (OfficeCounter tmp : counterList) {
         	JPanel singleCounter = new JPanel(new GridLayout(1, 2, 10, 0));
         	JLabel counterName = new JLabel("Counter "+tmp.getId());
@@ -135,25 +170,17 @@ public class Gui {
         	singleCounter.add(ticketAndDone);
         	officerPanel.add(singleCounter);
         }
-        
-        
-        
-        
-        
-        //OTHER VIEWS (Officer, Manager)
-        JTextArea jt3 = new JTextArea("Manager view is still in development, sorry");
 
-        tabbedPane.addTab("Customer", null, customerPanel, "See the customer view");
-        tabbedPane.addTab("Officer", null, officerPanel, "See the officer view");
-        tabbedPane.addTab("Manager", null, jt3, "See the manager view");
-        
-        
-        
-
-        
-        
-        //Right screen with the information on tickets currently served
-        System.out.println(counterList.size()+2);
+	}
+	
+	private void updateManagerView() {
+		managerPanel = new JPanel();
+		JTextArea jt3 = new JTextArea("Manager view is still in development, sorry");
+		managerPanel.add(jt3);
+		
+	}
+	
+	private void updateLobbyScreen() {
         JPanel display = new JPanel(new GridLayout(counterList.size()+2, 1, 0, 10));
     	JLabel label = new JLabel("Counters info");
     	display.add(label);
@@ -169,12 +196,8 @@ public class Gui {
         	display.add(label);
         }
         rightPanel.add(display);
-
-        //Adding Components to the frame.
-        frame.getContentPane().add(BorderLayout.CENTER, tabbedPane);
-        frame.getContentPane().add(BorderLayout.EAST, rightPanel);
-     	}
-
+	}
+	
 	public void show() {
         frame.setVisible(true);		
 	}
