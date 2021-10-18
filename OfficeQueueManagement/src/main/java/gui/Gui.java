@@ -190,11 +190,6 @@ public class Gui {
 	}
 	
 	private void paintGUI() {
-		//removing components of frame and tabbedPane
-		frame.remove(tabbedPane);
-		frame.remove(rightPanel);
-		tabbedPane.removeAll();
-		
 		//adding panels to tabbedPane
         tabbedPane.addTab("Customer", null, customerPanel, "See the customer view");
         tabbedPane.addTab("Officer", null, officerPanel, "See the officer view");
