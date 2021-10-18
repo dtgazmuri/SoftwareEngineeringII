@@ -249,6 +249,11 @@ public class Office {
 	 * @return The ticket to be served at this counter and null if the queues are empty
 	 */
 	public Ticket notifyThatCounterIsFree(int counterId) {
+		OfficeCounter currentCounter = getCounterById(counterId);
+		Ticket prevTicket = currentCounter.getCurrentlyServedTicket();
+		// TODO: save prevTicket to db
+		currentCounter.removeCurrentlyServedTicket();
+		Ticket t = null;
 		List<ServiceType> counterServiceTypes = getCounterById(counterId).getServiceTypeList();
 		ArrayList<OfficeQueue> selectedQueues = new ArrayList<>();
 		int maxQueueLength = 1;
@@ -263,7 +268,9 @@ public class Office {
 			maxQueueLength = getQueueByServiceType(st).getQueueLength();
 		}
 		if(selectedQueues.size() == 1 ){
-			return selectedQueues.get(0).popTicket();
+			t = selectedQueues.get(0).popTicket();
+			currentCounter.setCurrentlyServedTicket(t);
+			return t;
 		}
 		else if (selectedQueues.size() > 1 ){
 			double minTime = Double.MAX_VALUE;
@@ -274,6 +281,7 @@ public class Office {
 					selectedTicket = q.popTicket();
 				}
 			}
+			currentCounter.setCurrentlyServedTicket(selectedTicket);
 			return selectedTicket;
 		}
 		else return null;
