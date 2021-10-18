@@ -258,7 +258,7 @@ public class Office {
 	 * If two or more queues have the same length, the queue associated with request type having the lowest service time is selected.
 	 *
 	 * @param counterId The counter which is free at the moment
-	 * @return The ticket to be served at this counter
+	 * @return The ticket to be served at this counter and null if the queues are empty
 	 */
 	public Ticket notifyThatCounterIsFree(int counterId) {
 		List<ServiceType> counterServiceTypes = getCounterById(counterId).getServiceTypeList();
@@ -274,7 +274,7 @@ public class Office {
 			maxQueueLength = getQueueByServiceType(st).getQueueLength();
 		}
 		if(selectedQueues.size() == 1 ){
-			return selectedQueues.get(0).getTicketQueue().get(0);
+			return selectedQueues.get(0).popTicket();
 		}
 		else if (selectedQueues.size() > 1 ){
 			double minTime = Double.MAX_VALUE;
@@ -282,7 +282,7 @@ public class Office {
 			for (OfficeQueue q: selectedQueues){
 				if( q.getServiceType().getTime() < minTime){
 					minTime = q.getServiceType().getTime();
-					selectedTicket = q.getTicketQueue().get(0);
+					selectedTicket = q.popTicket();
 				}
 			}
 			return selectedTicket;
