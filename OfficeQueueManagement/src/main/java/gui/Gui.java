@@ -67,15 +67,8 @@ public class Gui {
         //Right screen with the information on tickets currently served
         updateLobbyScreen();
         
-        //adding panels to tabbedPane
-        tabbedPane.addTab("Customer", null, customerPanel, "See the customer view");
-        tabbedPane.addTab("Officer", null, officerPanel, "See the officer view");
-        tabbedPane.addTab("Manager", null, managerPanel, "See the manager view");
-        
-
-        //Adding Components to the frame.
-        frame.getContentPane().add(BorderLayout.CENTER, tabbedPane);
-        frame.getContentPane().add(BorderLayout.EAST, rightPanel);
+        //paint components into GUI
+        paintGUI();
      	}
 	
 	//dividing the creation function into smaller functions
@@ -123,9 +116,7 @@ public class Gui {
                      public void actionPerformed(ActionEvent event) 
                      {
                          customerPanel.remove(ticketPanel);
-                         //TODO: NOT WORKING (doesn't remove the ticket after 5 seconds)
-                         ticketPanel.validate();
-                         ticketPanel.repaint();
+                    	 repaintGUI();
                      }
                  });
         		 wipeOutTimer.setRepeats(false);
@@ -198,6 +189,29 @@ public class Gui {
         rightPanel.add(display);
 	}
 	
+	private void paintGUI() {
+		//removing components of frame and tabbedPane
+		frame.remove(tabbedPane);
+		frame.remove(rightPanel);
+		tabbedPane.removeAll();
+		
+		//adding panels to tabbedPane
+        tabbedPane.addTab("Customer", null, customerPanel, "See the customer view");
+        tabbedPane.addTab("Officer", null, officerPanel, "See the officer view");
+        tabbedPane.addTab("Manager", null, managerPanel, "See the manager view");
+        
+
+        //Adding Components to the frame.
+        frame.getContentPane().add(BorderLayout.CENTER, tabbedPane);
+        frame.getContentPane().add(BorderLayout.EAST, rightPanel);
+		
+	}
+	
+	private void repaintGUI() {
+		frame.invalidate();
+		frame.validate();
+		frame.repaint();
+	}
 	public void show() {
         frame.setVisible(true);		
 	}
