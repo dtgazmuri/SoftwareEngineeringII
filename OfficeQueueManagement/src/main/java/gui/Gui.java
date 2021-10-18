@@ -15,7 +15,6 @@ import office.Office;
 
 public class Gui {
 	//private List<ServiceType> serviceList;
-	private List<OfficeCounter> counterList;
 	private String[] serviceNames;
 	//private String selectedServiceName;
 	private final int FRAME_WIDTH = 1280;
@@ -31,11 +30,12 @@ public class Gui {
 	private JPanel managerPanel;
 	
 
-	public Gui (List<ServiceType> services, List<OfficeCounter> counterList, Office office) {
+	public Gui (Office o) {
 		//this.serviceList = services;
 		this.frame = new JFrame("OfficeQueueManager");
-		this.o = office;
-		this.counterList = counterList;
+		this.o = o;
+		List<ServiceType> services = o.getServiceTypeList();
+		
 		
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -133,6 +133,8 @@ public class Gui {
 	}
 
 	private void updateOfficerView() {
+		//update counterList
+		List<OfficeCounter> counterList = o.getCounterList();
 		officerPanel = new JPanel(new GridLayout(counterList.size(), 1, 0, 10));
         for (OfficeCounter tmp : counterList) {
         	JPanel singleCounter = new JPanel(new GridLayout(1, 2, 10, 0));
@@ -172,6 +174,9 @@ public class Gui {
 	}
 	
 	private void updateLobbyScreen() {
+		//update counterList
+		List<OfficeCounter> counterList = o.getCounterList();
+		
         JPanel display = new JPanel(new GridLayout(counterList.size()+2, 1, 0, 10));
     	JLabel label = new JLabel("Counters info");
     	display.add(label);
@@ -202,7 +207,7 @@ public class Gui {
 		
 	}
 	
-	private void repaintGUI() {
+	public void repaintGUI() {
 		frame.invalidate();
 		frame.validate();
 		frame.repaint();
