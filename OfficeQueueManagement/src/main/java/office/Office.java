@@ -292,9 +292,7 @@ public class Office {
 		else return null;
 	}
 	
-	
-	
-	//### TO DO ###//
+
 	
 	public Ticket getNewTicket(ServiceType s) {
 		System.out.println("Get Ticket: The service type is " + s.getName());
