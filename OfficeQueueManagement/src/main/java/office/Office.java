@@ -246,7 +246,7 @@ public class Office {
 	 * If two or more queues have the same length, the queue associated with request type having the lowest service time is selected.
 	 *
 	 * @param counterId The counter which is free at the moment
-	 * @return The ticket to be served at this counter
+	 * @return The ticket to be served at this counter and null if the queues are empty
 	 */
 	public Ticket notifyThatCounterIsFree(int counterId) {
 		List<ServiceType> counterServiceTypes = getCounterById(counterId).getServiceTypeList();
@@ -263,7 +263,7 @@ public class Office {
 			maxQueueLength = getQueueByServiceType(st).getQueueLength();
 		}
 		if(selectedQueues.size() == 1 ){
-			return selectedQueues.get(0).getTicketQueue().get(0);
+			return selectedQueues.get(0).popTicket();
 		}
 		else if (selectedQueues.size() > 1 ){
 			double minTime = Double.MAX_VALUE;
@@ -271,7 +271,7 @@ public class Office {
 			for (OfficeQueue q: selectedQueues){
 				if( q.getServiceType().getTime() < minTime){
 					minTime = q.getServiceType().getTime();
-					selectedTicket = q.getTicketQueue().get(0);
+					selectedTicket = q.popTicket();
 				}
 			}
 			return selectedTicket;
@@ -289,8 +289,33 @@ public class Office {
 		System.out.println("Get Ticket: Ticket number: " + CURRENT_TICKET_NUMBER);
 		Ticket newTicket = new Ticket(ticketNumber, s);
 		
-		OfficeQueue queueToPushTo =  getQueueByServiceType(s); // Get queue of service type
-		queueToPushTo.pushTicket(newTicket); // Push ticket to queue
+		OfficeCounter selectedCounter = null;
+		
+		// This for loop checks if there is a free counter that can immediately serve the client with
+		// this ticket
+		
+		for (int i = 0; i < getCounterNumber() ; i++ ) {
+			if (getCounterList().get(i).isServicePresent(s.getId())) {
+				if (getCounterList().get(i).getCurrentlyServedTicket() == null) {
+					selectedCounter = getCounterList().get(i);
+					break;
+				}
+				
+			}
+		}
+		
+		// If a free counter was found, the client is immediately served and the ticket doesn't enter
+		// the queue. If no free counter is found, the ticket joins the corresponding queue.
+		
+		if (selectedCounter != null) {
+			System.out.println("This ticket will be served right away in Counter " + selectedCounter.getId());
+			selectedCounter.setCurrentlyServedTicket(newTicket);
+		}
+		else {
+			System.out.println("All the counters that offer this service are currently busy, so the Ticket will join the queue");
+			OfficeQueue queueToPushTo =  getQueueByServiceType(s); // Get queue of service type
+			queueToPushTo.pushTicket(newTicket); // Push ticket to queue
+		}
 		
 		CURRENT_TICKET_NUMBER += 1;
 		

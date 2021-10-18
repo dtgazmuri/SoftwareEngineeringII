@@ -30,6 +30,7 @@ public class OfficeTest {
 
         assertTrue("the first ticket from the longest queue is selected",
                 o.notifyThatCounterIsFree(3).getId() == 10);
+        o.initialize();
 
         o.getQueueMap().get(o.getServiceTypeList().get(3)).pushTicket(new Ticket(10,o.getServiceTypeList().get(3)));
         o.getQueueMap().get(o.getServiceTypeList().get(3)).pushTicket(new Ticket(20,o.getServiceTypeList().get(3)));
