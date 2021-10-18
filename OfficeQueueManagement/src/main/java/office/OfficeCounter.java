@@ -53,6 +53,10 @@ public class OfficeCounter {
 		this.setCurrentlyServedTicket(null);
 	}
 	
+	public boolean isServingTicket() {
+		return !(this.getCurrentlyServedTicket() == null);
+	}
+	
 	
 	//### SERVICE TYPES MANAGEMENT ###//
 	

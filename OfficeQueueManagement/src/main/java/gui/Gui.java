@@ -69,11 +69,10 @@ public class Gui {
         
         //paint components into GUI
         paintGUI();
-     	}
+     }
 	
 	//dividing the creation function into smaller functions
 	private void updateCustomerView() {
-		tabbedPane.remove(customerPanel);
 		customerPanel = new JPanel();
         JLabel serviceLabel = new JLabel("Select the desired type of service: ");
         customerPanel.add(serviceLabel);
@@ -124,27 +123,34 @@ public class Gui {
         		 if (!wipeOutTimer.isRunning()) {
         		     wipeOutTimer.start();
         		 }
-        		 else 
+        		 else {
         			 wipeOutTimer.restart();
-                 
-        		 //recalcule tabs and repaint GUI
+        		 }
+        		 
+        		 
+        		 //Update the GUI
         		 updateOfficerView();
-        		 updateManagerView();
         		 updateLobbyScreen();
-        		 repaintGUI();
+                 
         	 }
     	 };
         pickTicket.addActionListener(ticketActionListener);
         customerPanel.add(pickTicket);
-        tabbedPane.addTab("Customer", null, customerPanel, "See the customer view");
-       	}
+	}
 
+	
+	
 	private void updateOfficerView() {
 		//update counterList
 		List<OfficeCounter> counterList = o.getCounterList();
-		tabbedPane.remove(officerPanel);
-		officerPanel = new JPanel(new GridLayout(counterList.size(), 1, 0, 10));
-		officerPanel.removeAll();
+		
+		if (officerPanel == null) {
+			officerPanel = new JPanel(new GridLayout(counterList.size(), 1, 0, 10));
+		}
+		else {
+			officerPanel.removeAll();
+		}
+		
         for (OfficeCounter tmp : counterList) {
         	JPanel singleCounter = new JPanel(new GridLayout(1, 2, 10, 0));
         	JLabel counterName = new JLabel("Counter "+tmp.getId());
@@ -161,8 +167,19 @@ public class Gui {
         	ActionListener counterActionListener = new ActionListener() {
             	public void actionPerformed(ActionEvent actionEvent) {
 					o.notifyThatCounterIsFree(tmp.getId());
-					o.addServedTicketToDB(tmp.getCurrentlyServedTicket(), tmp.getId());
-            		rightPanel.updateUI();
+					
+					//Check if it is not null
+					if (tmp.isServingTicket()) {
+						o.addServedTicketToDB(tmp.getCurrentlyServedTicket(), tmp.getId());
+					}
+            		
+					
+					rightPanel.updateUI();
+					
+					//Update the view
+					updateOfficerView();
+					updateLobbyScreen();
+					
             	}
             };
             done.addActionListener(counterActionListener);
@@ -171,19 +188,17 @@ public class Gui {
         	ticketAndDone.add(done);
         	singleCounter.add(ticketAndDone);
         	officerPanel.add(singleCounter);
+        	
+        	SwingUtilities.updateComponentTreeUI(frame);
         }
-        tabbedPane.addTab("Officer", null, officerPanel, "See the officer view");
-        
+
 	}
 	
 	private void updateManagerView() {
-		tabbedPane.remove(managerPanel);
 		managerPanel = new JPanel();
 		JTextArea jt3 = new JTextArea("Manager view is still in development, sorry");
-		managerPanel.removeAll();
 		managerPanel.add(jt3);
-		tabbedPane.addTab("Manager", null, managerPanel, "See the manager view");
-        
+		
 	}
 	
 	private void updateLobbyScreen() {
@@ -204,7 +219,12 @@ public class Gui {
         		label = new JLabel("Counter "+tmp.getId()+" isn't serving any ticket");
         	display.add(label);
         }
+        
+        
+        //remove all the components
         rightPanel.removeAll();
+        
+        //Add the new component
         rightPanel.add(display);
 	}
 	

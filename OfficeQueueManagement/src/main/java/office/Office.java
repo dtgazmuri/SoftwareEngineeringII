@@ -216,6 +216,7 @@ public class Office {
 		//4) Set up the service types for the counters
 		c1.addServiceType(serviceTypesList.get(1));
 		c1.addServiceType(serviceTypesList.get(2));
+		c1.addServiceType(serviceTypesList.get(0));
 		
 		c2.addServiceType(serviceTypesList.get(1));
 		c2.addServiceType(serviceTypesList.get(3));
@@ -251,8 +252,12 @@ public class Office {
 	public Ticket notifyThatCounterIsFree(int counterId) {
 		OfficeCounter currentCounter = getCounterById(counterId);
 		Ticket prevTicket = currentCounter.getCurrentlyServedTicket();
+		
+		
 		// TODO: save prevTicket to db
 		currentCounter.removeCurrentlyServedTicket();
+		
+		
 		Ticket t = null;
 		List<ServiceType> counterServiceTypes = getCounterById(counterId).getServiceTypeList();
 		ArrayList<OfficeQueue> selectedQueues = new ArrayList<>();
@@ -337,6 +342,7 @@ public class Office {
 	 * 
 	 */
 	public void addServedTicketToDB(Ticket t, int counter){
+		
 		try{
 			dbManager.addTicket(t, counter);
 		}
