@@ -67,7 +67,7 @@ public class Gui {
                          break;
                      }
                  }
-<<<<<<< HEAD
+
                  
         		 Ticket ticket = o.getNewTicket(o.getServiceTypeList().get(num));
         		 JPanel ticketPanel = new JPanel(new GridLayout(3, 1, 0, 10));
@@ -75,16 +75,8 @@ public class Gui {
         		 JLabel ticketIdLabel = new JLabel("ID: "+ticket.getId());
         		 JLabel ticketServiceLabel = new JLabel("Type of service: "+ticket.getServiceType().getName());
 				 //ADD ESTIMATED WAITING TIME
-=======
 
-				 Ticket ticket = o.getNewTicket(o.getServiceTypeList().get(num));
-        		 
-        		 //Ticket ticket = o.getNewTicket();
-        		 JPanel ticketPanel = new JPanel(new GridLayout(3, 1, 0, 10));
-        		 JLabel ticketPanelLable = new JLabel("Your ticket:", SwingConstants.CENTER);
-        		 JLabel ticketIdLabel = new JLabel("ID: "+ ticket.getId());
-        		 JLabel ticketServiceLabel = new JLabel("Type of service: "+ ticket.getServiceType().getName());
->>>>>>> bdf2cd091de2b6618eefcf0c482d463b313925b0
+
         		 ticketPanel.add(ticketPanelLable);
         		 ticketPanel.add(ticketIdLabel);
         		 ticketPanel.add(ticketServiceLabel);
