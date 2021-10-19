@@ -252,12 +252,16 @@ public class Office {
 	public Ticket notifyThatCounterIsFree(int counterId) {
 		OfficeCounter currentCounter = getCounterById(counterId);
 		Ticket prevTicket = currentCounter.getCurrentlyServedTicket();
-		
-		
-		// TODO: save prevTicket to db
+
+		if (prevTicket != null){
+			try {
+				dbManager.addTicket(prevTicket,counterId);
+			} catch (SQLException throwables) {
+				throwables.printStackTrace();
+			}
+		}
 		currentCounter.removeCurrentlyServedTicket();
-		
-		
+
 		Ticket t = null;
 		List<ServiceType> counterServiceTypes = getCounterById(counterId).getServiceTypeList();
 		ArrayList<OfficeQueue> selectedQueues = new ArrayList<>();
