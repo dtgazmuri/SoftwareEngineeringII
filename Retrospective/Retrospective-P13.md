@@ -112,18 +112,23 @@ NOTE: we have tested also the basic function (excluded in the coverage) but we m
 	We had errors in the estimation mainly due to the amount considered to re-learn (or learn from zero) Java basics and applying this to the graphic interfaces part of the project.
 
 - What lessons did you learn (both positive and negative) in this sprint?
+
 	We have to choose wisely which programming langugage to use in the future, in order to optimize the limited time we had to develop the project. However, we have taken this sprint as an opportunity to learn new tools for the future.
 
 - Which improvement goals set in the previous retrospective were you able to achieve?
+
 	We wanted to start well as a team and divide the work load properly. We think we managed to do this fairly well, assigning tasks according to each person's skill in the chosen programming language.
 
 - Which ones you were not able to achieve? Why?
+
 	We wanted to complete more stories, especially the one of the manager statistics. We even developed the database for this, but we weren't able to complete the story. Due to the estimations done by the Poker game, we realized it was hard to fit this story in the sprint.
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
+
 	In future sprints we would like to divide our time more precisely into development, testing and review. In the previous sprint we did not do this thoroughly, leading to some time being wasted.
 
 - One thing you are proud of as a Team
+
 	We are proud of the end product. We know there is a lot of work yet to be done, but we progressed a lot and have a functional product to show the stakeholders. We have also listened to the feedback received by them and have taken it as an opportunity to improve our product. We are also proud of the effort estimation done through the Planning Poker game, since it was pretty accurate and helped us a lot to plan.
 
 
