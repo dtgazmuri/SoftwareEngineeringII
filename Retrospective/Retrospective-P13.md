@@ -108,6 +108,7 @@ NOTE: we have tested also the basic function (excluded in the coverage) but we m
 ## ASSESSMENT
 
 - What caused your errors in estimation (if any)?
+
 	We had errors in the estimation mainly due to the amount considered to re-learn (or learn from zero) Java basics and applying this to the graphic interfaces part of the project.
 
 - What lessons did you learn (both positive and negative) in this sprint?
