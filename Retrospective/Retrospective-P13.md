@@ -120,8 +120,6 @@ NOTE: we have tested also the basic function (excluded in the coverage) but we m
 	We wanted to complete more stories, especially the one of the manager statistics. We even developed the database for this, but we weren't able to complete the story. Due to the estimations done by the Poker game, we realized it was hard to fit this story in the sprint.
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
-
-> Propose one or two
 	In future sprints we would like to divide our time more precisely into development, testing and review. In the previous sprint we did not do this thoroughly, leading to some time being wasted.
 
 - One thing you are proud of as a Team
